@@ -4,15 +4,20 @@
 #include "MQ7.h"
 #include "SDS011.h"
 #include <SoftwareSerial.h>   //Header for Location
+
+
+
 #define BLYNK_TEMPLATE_ID "TMPLTtUw3aPb"
 #define BLYNK_TEMPLATE_NAME "Living Sane"
 #define BLYNK_AUTH_TOKEN "Le1pNdDBrs0jBm2qL3VKWulK3QBCF7ix"
+
 
 #define DHTPIN 15      // Digital pin connected to the DHT sensor
 #define DHTTYPE DHT22  // DHT22 
 #define A_PIN 12
 #define VOLTAGE 5
 
+SoftwareSerial sim800l(2, 3);   //Check the pin connections
 
 DHT dht(DHTPIN, DHTTYPE);
 MQ7 mq7(A_PIN, VOLTAGE);
@@ -38,11 +43,9 @@ void setup() {
   mq7.calibrate();	
   //GSM begin
   gsmSerial.begin(115200);
-  delay(1000);
-  gsmSerial.print("AT+CGNSPWR=1\r\n"); // Power on the GPS module
-  delay(1000);
+  gsmSerial.print("AT+CGNSPWR=1\r\n"); // Power on the GPS mod
   gsmSerial.print("AT+CGNSTST=1\r\n"); // Start receiving the GPS data
-  delay(1000);
+  delay(100);
   //WiFi.begin(ssid, password);
  
 }
@@ -118,7 +121,11 @@ void loop() {
   return location;
 }
   
-  
+  //calling if values are above limits
+  if(t>45 || humidity > 85)
+  {
+  	sim800l.println("ATD+919881420728;");
+  }
   // Wifi Connection to send data to blynk
 
   Blynk.virtualWrite(0, h);  // Send humidity data to Virtual Pin 5

@@ -82,7 +82,22 @@ void loop() {
     }
   }
   
-  String parseGNGGA(String sentence) {
+  //calling if values are above limits
+  if(t>45 || humidity > 85)
+  {
+  	sim800l.println("ATD+919881420728;");
+  }
+  // Wifi Connection to send data to blynk
+
+  Blynk.virtualWrite(0, h);  // Send humidity data to Virtual Pin 5
+  Blynk.virtualWrite(1, t);  // Send temperature data to Virtual Pin 6
+  Blynk.virtualWrite(2, p25);  // Send PM2.5 data to Virtual Pin 5
+  Blynk.virtualWrite(3, p10);  // Send PM10 data to Virtual Pin 6
+
+}
+//Function for Longitudes and Latitudes.
+
+String parseGNGGA(String sentence) {
   String location = "";
   int i = 0;
   while (sentence[i] != '\0') {
@@ -119,18 +134,4 @@ void loop() {
     i++;
   }
   return location;
-}
-  
-  //calling if values are above limits
-  if(t>45 || humidity > 85)
-  {
-  	sim800l.println("ATD+919881420728;");
-  }
-  // Wifi Connection to send data to blynk
-
-  Blynk.virtualWrite(0, h);  // Send humidity data to Virtual Pin 5
-  Blynk.virtualWrite(1, t);  // Send temperature data to Virtual Pin 6
-  Blynk.virtualWrite(2, p25);  // Send PM2.5 data to Virtual Pin 5
-  Blynk.virtualWrite(3, p10);  // Send PM10 data to Virtual Pin 6
-
 }

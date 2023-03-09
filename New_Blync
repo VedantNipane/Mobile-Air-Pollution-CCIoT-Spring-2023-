@@ -40,7 +40,7 @@ void setup() {
   dht.begin();
   mq7.calibrate();	
 
-  WiFi.begin(ssid, password);
+  WiFi.begin(ssid, pass);
   while (WiFi.status() != WL_CONNECTED) {
     delay(100);
     Serial.print("Searching for wifi...");
